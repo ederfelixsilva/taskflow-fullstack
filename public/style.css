@@ -1,0 +1,246 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.container {
+  width: 100%;
+  max-width: 700px;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.form-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+input, select {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  flex: 1;
+}
+
+button {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#addTask {
+  width: 100%;
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  color: white;
+  margin-bottom: 15px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.filters button {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  margin-left: 5px;
+}
+
+.filters button.active {
+  background: #00c6ff;
+}
+
+.stats {
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  background: rgba(255,255,255,0.08);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.done {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.priority {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.priority.Baixa { background: green; }
+.priority.Media { background: orange; }
+.priority.Alta { background: red; }
+
+footer {
+  text-align: center;
+  margin-top: 15px;
+  opacity: 0.7;
+}
+
+.title-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.version-badge {
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 0 10px rgba(0, 198, 255, 0.6);
+}
+
+/* ===== HERO STARTUP STYLE ===== */
+
+.hero {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.brand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge {
+  background: linear-gradient(90deg, #00f2fe, #4facfe);
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 0 15px rgba(79, 172, 254, 0.7);
+}
+
+.subtitle {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+.release {
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: 0.7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #00ff88;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00ff88;
+}
+
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container {
+  animation: fadeSlide 0.8s ease forwards;
+}
+
+.theme-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 50%;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: white;
+}
+
+.light-mode {
+  background: #f5f7fa;
+  color: #222;
+}
+
+.light-mode .card {
+  background: white;
+  color: #222;
+}
+
+.light-mode body {
+  background: linear-gradient(135deg, #dfe9f3, #ffffff);
+}
+
+.dashboard {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.dash-card {
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.dash-card h3 {
+  font-size: 20px;
+}

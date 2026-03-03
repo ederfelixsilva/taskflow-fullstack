@@ -1,0 +1,13 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node server",
+    "start": "node server"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
