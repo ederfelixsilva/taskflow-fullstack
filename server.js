@@ -13,7 +13,7 @@ app.use("/api/tasks", tasksRoutes);
 
 app.use(express.static(path.join(process.cwd(), "public")));
 
-app.get("/*", (req, res) => {
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });
 
