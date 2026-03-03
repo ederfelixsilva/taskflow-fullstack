@@ -7,14 +7,13 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// API
+
 app.use("/api/tasks", tasksRoutes);
 
-// Frontend
+
 app.use(express.static(path.join(process.cwd(), "public")));
 
-
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });
 
