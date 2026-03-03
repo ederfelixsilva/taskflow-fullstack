@@ -24,6 +24,7 @@ let currentFilter = "all";
 // ===== API HELPERS =====
 async function apiGetTasks() {
   const res = await fetch(API_URL);
+  if (!res.ok) throw new Error("Falha ao carregar tasks");
   return res.json();
 }
 
@@ -49,7 +50,16 @@ async function apiUpdateTask(id, patch) {
 
 async function apiDeleteTask(id) {
   const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+  // DELETE pode retornar 204 (No Content)
   if (!res.ok && res.status !== 204) throw new Error("Falha ao deletar task");
+}
+
+// ===== UI HELPERS =====
+function setButtonLoading(btn, isLoading, textWhenIdle) {
+  if (!btn) return;
+  btn.disabled = isLoading;
+  btn.style.opacity = isLoading ? "0.7" : "1";
+  btn.textContent = isLoading ? "..." : textWhenIdle;
 }
 
 // ===== RENDER =====
@@ -64,9 +74,10 @@ function renderTasks() {
   });
 
   // BUSCA
-  filtered = filtered.filter(task =>
-    task.title.toLowerCase().includes(searchInput.value.toLowerCase())
-  );
+  const q = searchInput.value.trim().toLowerCase();
+  if (q) {
+    filtered = filtered.filter(task => task.title.toLowerCase().includes(q));
+  }
 
   // LISTA
   filtered.forEach(task => {
@@ -76,37 +87,48 @@ function renderTasks() {
     info.className = "task-info";
     info.innerHTML = `
       <strong class="${task.done ? "done" : ""}">${task.title}</strong>
-      <small>${task.date || "Sem data definida"}</small>
+      <small>${task.date ? task.date : "Sem data definida"}</small>
     `;
 
     const right = document.createElement("div");
 
     const priority = document.createElement("span");
-    priority.className = `priority ${task.priority}`;
-    priority.textContent = task.priority; // Baixa / Media / Alta
+    // prioridade: Baixa / Media / Alta
+    priority.className = `priority ${task.priority || "Media"}`;
+    priority.textContent = task.priority || "Media";
 
     const toggleBtn = document.createElement("button");
-    toggleBtn.textContent = "✔";
+    toggleBtn.title = task.done ? "Marcar como pendente" : "Concluir tarefa";
+    toggleBtn.textContent = task.done ? "↩" : "✔";
     toggleBtn.onclick = async () => {
       try {
+        toggleBtn.disabled = true;
         const updated = await apiUpdateTask(task.id, { done: !task.done });
-        // atualiza no estado local
         tasks = tasks.map(t => (t.id === task.id ? updated : t));
         renderTasks();
       } catch (e) {
-        alert("Erro ao atualizar tarefa.");
+        alert("Erro ao concluir/atualizar tarefa.");
+      } finally {
+        toggleBtn.disabled = false;
       }
     };
 
     const deleteBtn = document.createElement("button");
+    deleteBtn.title = "Excluir tarefa";
     deleteBtn.textContent = "🗑";
     deleteBtn.onclick = async () => {
+      const ok = confirm("Deseja excluir esta tarefa?");
+      if (!ok) return;
+
       try {
+        deleteBtn.disabled = true;
         await apiDeleteTask(task.id);
         tasks = tasks.filter(t => t.id !== task.id);
         renderTasks();
       } catch (e) {
-        alert("Erro ao deletar tarefa.");
+        alert("Erro ao excluir tarefa.");
+      } finally {
+        deleteBtn.disabled = false;
       }
     };
 
@@ -131,8 +153,8 @@ function renderTasks() {
 async function refresh() {
   try {
     tasks = await apiGetTasks();
-    // opcional: mostrar mais recentes primeiro
-    tasks.sort((a, b) => b.id - a.id);
+    // mais recentes primeiro (se id for timestamp)
+    tasks.sort((a, b) => (b.id || 0) - (a.id || 0));
     renderTasks();
   } catch (e) {
     console.error(e);
@@ -146,6 +168,8 @@ addTaskBtn.onclick = async () => {
   if (!title) return;
 
   try {
+    setButtonLoading(addTaskBtn, true, "Adicionar Tarefa");
+
     const created = await apiCreateTask({
       title,
       date: dateInput.value || null,
@@ -157,15 +181,21 @@ addTaskBtn.onclick = async () => {
 
     titleInput.value = "";
     dateInput.value = "";
+    prioritySelect.value = "Media";
+    titleInput.focus();
   } catch (e) {
+    console.error(e);
     alert("Erro ao criar tarefa.");
+  } finally {
+    setButtonLoading(addTaskBtn, false, "Adicionar Tarefa");
   }
 };
 
 // ===== FILTROS =====
 filterButtons.forEach(btn => {
   btn.onclick = () => {
-    document.querySelector(".filters .active").classList.remove("active");
+    const current = document.querySelector(".filters .active");
+    if (current) current.classList.remove("active");
     btn.classList.add("active");
     currentFilter = btn.dataset.filter;
     renderTasks();
