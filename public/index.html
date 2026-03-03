@@ -8,23 +8,20 @@
 </head>
 <body>
   <main class="container">
-    
+    <header class="hero">
+      <div class="brand">
+        <h1>TaskFlow</h1>
+        <span class="badge">v1.2</span>
+        <button id="themeToggle" class="theme-btn">🌙</button>
+      </div>
 
- <header class="hero">
-  <div class="brand">
-    <h1>TaskFlow</h1>
-    <span class="badge">v1.1</span>
-    <button id="themeToggle" class="theme-btn">🌙</button>
-  </div>
+      <p class="subtitle">Productivity Management System</p>
 
-  <p class="subtitle">Productivity Management System</p>
-
-  <div class="release">
-    <span class="dot"></span>
-    Stable Release • 2026
-  </div>
-</header>
-  
+      <div class="release">
+        <span class="dot"></span>
+        Stable Release • 2026
+      </div>
+    </header>
 
     <section class="card">
       <div class="form-group">
@@ -32,8 +29,8 @@
         <input type="date" id="date" />
         <select id="priority">
           <option value="Baixa">Baixa</option>
-<option value="Media">Media</option>
-<option value="Alta">Alta</option>
+          <option value="Media" selected>Média</option>
+          <option value="Alta">Alta</option>
         </select>
       </div>
 
@@ -52,30 +49,57 @@
         <span id="totalTasks">0 tarefas</span>
       </div>
 
-<div class="dashboard">
-  <div class="dash-card">
-    <h3 id="totalCount">0</h3>
-    <span>Total</span>
-  </div>
-  <div class="dash-card">
-    <h3 id="pendingCount">0</h3>
-    <span>Pendentes</span>
-  </div>
-  <div class="dash-card">
-    <h3 id="doneCount">0</h3>
-    <span>Concluídas</span>
-  </div>
-</div>
+      
+      <div class="dashboard">
+        <div class="dash-card">
+          <h3 id="totalCount">0</h3>
+          <span>Total</span>
+        </div>
+        <div class="dash-card">
+          <h3 id="pendingCount">0</h3>
+          <span>Pendentes</span>
+        </div>
+        <div class="dash-card">
+          <h3 id="doneCount">0</h3>
+          <span>Concluídas</span>
+        </div>
+      </div>
+
+      
+      <div class="progress-wrap">
+        <div class="progress-head">
+          <span>Progresso</span>
+          <strong id="progressText">0%</strong>
+        </div>
+        <div class="progress-bar">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+      </div>
+
+     
+      <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <span>Carregando tarefas...</span>
+      </div>
+
       <ul id="taskList"></ul>
     </section>
 
-  <footer>
-  <small>
-    © 2026 TaskFlow • Productivity System <br>
-    Built by Éder Félix • Version 1.1
-  </small>
-</footer>
+    <footer>
+      <small>
+        © 2026 TaskFlow • Productivity System <br>
+        Built by Éder Félix • Version 1.2
+      </small>
+    </footer>
   </main>
+
+  <div id="toast" class="toast hidden">
+    <div class="toast-content">
+      <strong id="toastTitle">Título</strong>
+      <p id="toastMsg">Mensagem</p>
+    </div>
+    <button id="toastClose" class="toast-close">✕</button>
+  </div>
 
   <script src="script.js"></script>
 </body>

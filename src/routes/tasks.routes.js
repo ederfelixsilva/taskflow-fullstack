@@ -3,91 +3,87 @@ import fs from "fs";
 import path from "path";
 
 const router = Router();
-const dbPath = path.join(process.cwd(), "src", "data", "db.json");
+const dbPath = path.resolve("src/data/db.json");
 
-// ===== FUNÇÕES AUXILIARES =====
+function ensureDbFile() {
+  const dir = path.dirname(dbPath);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+  if (!fs.existsSync(dbPath)) {
+    fs.writeFileSync(dbPath, JSON.stringify({ tasks: [] }, null, 2));
+    return;
+  }
+
+  const raw = fs.readFileSync(dbPath, "utf-8").trim();
+  if (!raw) fs.writeFileSync(dbPath, JSON.stringify({ tasks: [] }, null, 2));
+}
+
 function readDb() {
+  ensureDbFile();
+  const raw = fs.readFileSync(dbPath, "utf-8").trim();
   try {
-    const raw = fs.readFileSync(dbPath, "utf-8").trim();
-    return raw ? JSON.parse(raw) : { tasks: [] };
-  } catch (err) {
+    const parsed = raw ? JSON.parse(raw) : { tasks: [] };
+    if (Array.isArray(parsed)) return { tasks: parsed };
+    return { tasks: Array.isArray(parsed.tasks) ? parsed.tasks : [] };
+  } catch {
     return { tasks: [] };
   }
 }
 
 function writeDb(data) {
+  ensureDbFile();
   fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
 }
 
-// ===== GET - LISTAR TODAS =====
 router.get("/", (req, res) => {
   const data = readDb();
-  res.json(data.tasks || []);
+  res.json(data.tasks);
 });
 
-// ===== POST - CRIAR =====
 router.post("/", (req, res) => {
   const { title, date, priority } = req.body;
 
-  if (!title) {
+  if (!title || !String(title).trim()) {
     return res.status(400).json({ error: "Título é obrigatório" });
   }
 
   const data = readDb();
-
   const newTask = {
     id: Date.now(),
     title: String(title).trim(),
     date: date || null,
     priority: priority || "Media",
     done: false,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   };
 
   data.tasks.push(newTask);
   writeDb(data);
-
   res.status(201).json(newTask);
 });
 
-// ===== PATCH - ATUALIZAR =====
 router.patch("/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const updates = req.body;
-
+  const idParam = req.params.id;
   const data = readDb();
 
-  const index = data.tasks.findIndex(task => task.id === id);
+  const idx = data.tasks.findIndex(t => String(t.id) === String(idParam));
+  if (idx === -1) return res.status(404).json({ error: "Tarefa não encontrada" });
 
-  if (index === -1) {
-    return res.status(404).json({ error: "Tarefa não encontrada" });
-  }
-
-  data.tasks[index] = {
-    ...data.tasks[index],
-    ...updates
-  };
-
+  data.tasks[idx] = { ...data.tasks[idx], ...req.body };
   writeDb(data);
 
-  res.json(data.tasks[index]);
+  res.json(data.tasks[idx]);
 });
 
-// ===== DELETE - REMOVER =====
 router.delete("/:id", (req, res) => {
-  const id = Number(req.params.id);
-
+  const idParam = req.params.id;
   const data = readDb();
 
-  const initialLength = data.tasks.length;
-  data.tasks = data.tasks.filter(task => task.id !== id);
-
-  if (data.tasks.length === initialLength) {
-    return res.status(404).json({ error: "Tarefa não encontrada" });
-  }
+  const before = data.tasks.length;
+  data.tasks = data.tasks.filter(t => String(t.id) !== String(idParam));
+  if (data.tasks.length === before) return res.status(404).json({ error: "Tarefa não encontrada" });
 
   writeDb(data);
-
   res.status(204).end();
 });
 
