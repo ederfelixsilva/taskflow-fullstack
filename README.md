@@ -1,4 +1,7 @@
-# 🚀 TaskFlow v1.1
+# 🚀 TaskFlow v1.2
+
+🔗 **Demo Online:**  
+https://taskflow-fullstack-petf.onrender.com
 
 Sistema Full Stack de gerenciamento de tarefas desenvolvido com Node.js, Express e integração com API REST.
 
@@ -33,16 +36,19 @@ Este projeto foi desenvolvido com o objetivo de demonstrar habilidades em desenv
 
 ---
 
+
 ## ✨ Funcionalidades
 
 - ✅ Criar tarefas
-- ✅ Atualizar status (concluída / pendente)
+- ✅ Concluir / Desmarcar tarefas
 - ✅ Excluir tarefas
-- ✅ Filtro (Todas / Pendentes / Concluídas)
+- ✅ Filtros (Todas / Pendentes / Concluídas)
 - ✅ Busca por título
 - ✅ Dashboard com estatísticas
-- ✅ Dark/Light Mode
-- ✅ Persistência de dados no backend
+- ✅ Barra de progresso (% concluído)
+- ✅ Toast feedback (UX)
+- ✅ Dark / Light Mode
+- ✅ Deploy em produção (Render)
 
 ---
 
@@ -57,26 +63,55 @@ Este projeto foi desenvolvido com o objetivo de demonstrar habilidades em desenv
 
 ---
 
+📁 Estrutura do Projeto
+
+backend/
+│
+├── public/                # Frontend (HTML, CSS, JS)
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+├── src/
+│   ├── routes/
+│   │   └── tasks.routes.js
+│   └── data/
+│       └── db.json
+│
+├── server.js
+└── package.json
+
+---
+
+🧠 Aprendizados
+
+Durante o desenvolvimento deste projeto foram aplicados conceitos como:
+
+Estruturação de API REST
+Manipulação de arquivos no backend
+Tratamento de erros com HTTP Status
+Integração assíncrona com Fetch API
+Debug utilizando Network e Console
+Deploy e resolução de erros em produção
+
 ## ⚙ Como rodar localmente
 
 ```bash
 npm install
 node server.js
-```
+
 
 Abra no navegador:
-
-```
 http://localhost:3000
-```
+
 
 ---
 
-## 📈 Histórico de Versões
+📈 Histórico de Versões
 
-- v1.0 – Versão com LocalStorage
-- v1.1 – Integração Full Stack com API REST
-
+v1.0 – Versão com LocalStorage
+v1.1 – Integração Full Stack com API REST
+v1.2 – Melhorias de UX (Toast + Progress Bar + Loading)
 ---
 
 ## 👨‍💻 Desenvolvedor
@@ -84,3 +119,4 @@ http://localhost:3000
 Éder Félix Silva  
 Estudante de Análise e Desenvolvimento de Sistemas  
 Futuro Desenvolvedor Full Stack
+
